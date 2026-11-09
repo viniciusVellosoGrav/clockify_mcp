@@ -155,10 +155,25 @@ As ferramentas ficam no servidor; o **comportamento** que as usa bem mora em uma
 aqui em [`.claude/skills/clockify-horas/SKILL.md`](.claude/skills/clockify-horas/SKILL.md): título =
 título exato do card, `iniciar_cronometro_paralelo` (a `iniciar_cronometro` não é acionável aqui),
 fechar quando o entregável acabou, corrigir com `editar_lancamento`, vários cronômetros, escopo só
-LEIA. Instale no agente para o comportamento ser o mesmo da equipe:
+LEIA.
+
+### O que fazer com cada arquivo
+
+| Arquivo | O que fazer |
+| --- | --- |
+| `server.py` | é o servidor MCP: registrar no cliente (passo 3). Não se instala nada no Python. |
+| `.claude/skills/clockify-horas/SKILL.md` | regras de comportamento: ligar no agente por **symlink** (abaixo). |
+| `README.md` | este arquivo. |
+| `.gitignore` | já cobre `credentials.json`, `__pycache__` e `.DS_Store`. |
+
+### Instalar a skill
+
+O Claude Code lê `.claude/skills/` **do projeto em que a sessão está rodando** — isso não serve para
+trabalhar em outro repositório. Por isso a instalação é global, e por symlink (não cópia: `git pull`
+atualiza a regra de todo mundo, sem reinstalar).
 
 ```bash
-# Claude Code (skill global, vale em qualquer projeto)
+# Claude Code (global, vale em qualquer projeto)
 ln -s /caminho/absoluto/clockify_mcp/.claude/skills/clockify-horas ~/.claude/skills/clockify-horas
 
 # Hermes
@@ -171,8 +186,12 @@ mklink /J "%USERPROFILE%\.claude\skills\clockify-horas" "C:\caminho\clockify_mcp
 mklink /J "%USERPROFILE%\.hermes\skills\clockify-horas" "C:\caminho\clockify_mcp\.claude\skills\clockify-horas"
 ```
 
-Ao atualizar a skill no repositório, o agente de todo mundo passa a ler a mesma regra (symlink, não
-cópia).
+Se o cliente não suportar skills (outro agente), aponte o arquivo para ele — o conteúdo é markdown
+puro e pode ir para um `AGENTS.md`/instrução do projeto.
+
+**Conferir que carregou:** sessão nova, pedir "quais cronômetros estão em andamento". O agente deve
+responder com a lista (id, descrição, projeto) e, ao iniciar algo, usar
+`iniciar_cronometro_paralelo` com o título de um card — nunca a `iniciar_cronometro`.
 
 ## Passar para outra pessoa
 
