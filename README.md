@@ -36,7 +36,8 @@ No **aplicativo LEIA** → **Configurações** (seção **Segurança**) → **"C
 horas"** → **Gerar chave**.
 
 - A chave aparece **uma única vez** ("Copie agora; ela não aparece de novo") e começa com `leia_tt_`.
-- A mesma seção mostra a **URL base** para copiar — é a base da API do ambiente + `/clockify/api/v1`.
+- A mesma seção mostra a **URL base** para copiar — é a base da API do ambiente + `/clockify/api/v1`
+  (no GRAV: `https://grav-lightsail.grav.digital/leia_prod/clockify/api/v1`).
 - "Gerar nova chave" derruba a anterior na hora; "Revogar" corta o acesso de quem usa a chave.
 - A seção só aparece onde o controle de horas está ligado no ambiente; não apareceu, é isso.
 
@@ -49,14 +50,16 @@ outra pessoa.
 
 ```json
 {
-  "baseUrl": "URL BASE copiada da tela do app",
+  "baseUrl": "https://grav-lightsail.grav.digital/leia_prod/clockify/api/v1",
   "apiKey": "leia_tt_...",
   "workspaceId": "tarefas-leia",
   "concorrente": true
 }
 ```
 
-- `baseUrl`: sem ele o servidor cai no Clockify **oficial** em silêncio (horas no lugar errado).
+- `baseUrl`: o do servidor **GRAV**, exatamente o acima (é o mesmo que a seção "Chave da API do
+  controle de horas" mostra em "URL base"). Sem ele o servidor cai no Clockify **oficial** em
+  silêncio (horas no lugar errado).
 - `workspaceId`: no backend da Leia o "workspace" é um **quadro do CRM** — o de horas. No ambiente
   `grav`, o quadro "Tarefas Leia" responde pelo slug `tarefas-leia`. Com `baseUrl` da Leia ele é
   **obrigatório**: sem isso o servidor procura o workspace "Felipe Cerqueira" do Clockify oficial e
