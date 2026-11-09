@@ -329,8 +329,9 @@ chamada HTTP na mão.
 - Para iniciar o cronômetro a partir de um card do "Tarefas Leia": primeiro chame a ferramenta
   `card` do servidor leia-tarefas e passe o título COMPLETO do card como `descricao`. Este
   servidor não conhece o CRM.
-- Tudo vai no workspace do Felipe Cerqueira. Projeto: "LeIA" por padrão; reunião → `reuniao=True`
-  (projeto "Atividades GRAV"). Em caso de dúvida se é reunião, pergunte; não chute.
+- O workspace vem da credencial (`workspaceId`; no GRAV é o quadro "Tarefas Leia"). Projeto: "LeIA"
+  por padrão; reunião → `reuniao=True` (projeto "Atividades GRAV"). Em caso de dúvida se é reunião,
+  pergunte; não chute.
 - Com cronômetros SIMULTÂNEOS ativos (`"concorrente": true`), `iniciar_cronometro` NÃO é acionável:
   ela fecharia o timer que está rodando, então responde ERRO e não inicia nem para nada. Nesse modo
   use `iniciar_cronometro_paralelo`, que começa ao lado dos que já rodam (cada timer é hora real de

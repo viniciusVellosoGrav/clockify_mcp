@@ -149,6 +149,31 @@ O backend é escolhido **só** pela credencial:
   API) e, se quiser, `workspaceId`. Sem `workspaceId` vale o workspace "Felipe Cerqueira". Nesse
   modo `iniciar_cronometro` volta a fechar o timer anterior, porque não há como ter dois.
 
+## Regras do agente (o comportamento do time, versionado)
+
+As ferramentas ficam no servidor; o **comportamento** que as usa bem mora em uma skill, versionada
+aqui em [`.claude/skills/clockify-horas/SKILL.md`](.claude/skills/clockify-horas/SKILL.md): título =
+título exato do card, `iniciar_cronometro_paralelo` (a `iniciar_cronometro` não é acionável aqui),
+fechar quando o entregável acabou, corrigir com `editar_lancamento`, vários cronômetros, escopo só
+LEIA. Instale no agente para o comportamento ser o mesmo da equipe:
+
+```bash
+# Claude Code (skill global, vale em qualquer projeto)
+ln -s /caminho/absoluto/clockify_mcp/.claude/skills/clockify-horas ~/.claude/skills/clockify-horas
+
+# Hermes
+ln -s /caminho/absoluto/clockify_mcp/.claude/skills/clockify-horas ~/.hermes/skills/clockify-horas
+```
+
+```bat
+:: Windows (cmd) — junção no lugar do symlink
+mklink /J "%USERPROFILE%\.claude\skills\clockify-horas" "C:\caminho\clockify_mcp\.claude\skills\clockify-horas"
+mklink /J "%USERPROFILE%\.hermes\skills\clockify-horas" "C:\caminho\clockify_mcp\.claude\skills\clockify-horas"
+```
+
+Ao atualizar a skill no repositório, o agente de todo mundo passa a ler a mesma regra (symlink, não
+cópia).
+
 ## Passar para outra pessoa
 
 Vai no repositório: `server.py` + este README. **Não** vai: `credentials.json`, chave `leia_tt_`,
