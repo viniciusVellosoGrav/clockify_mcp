@@ -24,11 +24,14 @@ para o relógio.
 
 ### Pré-requisitos
 
-- `uv` no PATH (macOS: `brew install uv`, ou `curl -LsSf https://astral.sh/uv/install.sh | sh`).
+- `uv` no PATH — instalador oficial por sistema:
+  - macOS: `brew install uv`
+  - Linux / WSL: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+  - Windows: `winget install --id=astral-sh.uv -e` (ou `powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`)
 - Um cliente MCP: **Claude Code** (`claude`) ou **Hermes**.
 - Python **não** precisa estar instalado: o `server.py` é um script PEP 723 (`requires-python
   >=3.10`, dependência `mcp`) e o `uv run --script` baixa um Python gerenciado quando o da máquina é
-  antigo (o do macOS ainda vem 3.9).
+  antigo — o do macOS ainda vem 3.9, e várias distros Linux vêm 3.8/3.9.
 
 ### 1. Gerar a chave pessoal no aplicativo
 
@@ -46,7 +49,9 @@ outra pessoa.
 
 ### 2. Criar a credencial
 
-`~/.config/clockify-mcp/credentials.json` (ou o caminho em `$CLOCKIFY_MCP_CRED`):
+`~/.config/clockify-mcp/credentials.json` — o `~` vale nos três sistemas (no Windows é
+`C:\Users\<você>`, então o arquivo fica em `C:\Users\<você>\.config\clockify-mcp\credentials.json`).
+Ou o caminho que estiver em `$CLOCKIFY_MCP_CRED` / `%CLOCKIFY_MCP_CRED%`:
 
 ```json
 {
@@ -67,18 +72,21 @@ outra pessoa.
 - `concorrente: true`: declara que o servidor aceita **vários cronômetros ao mesmo tempo** (o da
   Leia aceita; o oficial não). Nunca ligar apontando para o Clockify oficial.
 
-Dica: `chmod 600 ~/.config/clockify-mcp/credentials.json`. Os projetos "LeIA" e "Atividades GRAV"
+Dica: restrinja a leitura ao seu usuário (`chmod 600 ~/.config/clockify-mcp/credentials.json` no
+macOS/Linux; no Windows o arquivo já fica sob o seu perfil). Os projetos "LeIA" e "Atividades GRAV"
 já existem nesse quadro — sem eles o cronômetro não acha o projeto.
 
 ### 3. Registrar no Claude Code
 
 ```
-claude mcp add --scope user clockify -- uv run --script "$HOME/caminho/para/clockify_mcp/server.py"
+claude mcp add --scope user clockify -- uv run --script /caminho/absoluto/clockify_mcp/server.py
 ```
 
 - `--scope user` = disponível em todos os projetos; `--scope local` (padrão) = só no diretório onde
   o comando foi rodado; `--scope project` grava no `.mcp.json` do repositório.
-- Use caminho **absoluto** (o Claude sobe o servidor fora do diretório do comando).
+- Caminho **absoluto** (o Claude sobe o servidor fora do diretório do comando): macOS/Linux
+  `/Users/voce/clockify_mcp/server.py`; Windows `C:\Users\voce\clockify_mcp\server.py` (entre aspas se
+  houver espaço).
 - Conferir: `claude mcp get clockify` → `Status: ✔ Connected`, `Type: stdio`, `Command: uv`,
   `Args: run --script .../server.py`. Remover: `claude mcp remove clockify -s user`.
 - O servidor novo só aparece em sessão nova (as ferramentas são lidas quando o processo sobe).
@@ -86,7 +94,7 @@ claude mcp add --scope user clockify -- uv run --script "$HOME/caminho/para/cloc
 No **Hermes** o registro equivalente é:
 
 ```
-hermes mcp add clockify --command uv --args run --script /caminho/para/clockify_mcp/server.py
+hermes mcp add clockify --command uv --args run --script /caminho/absoluto/clockify_mcp/server.py
 ```
 
 O prompt "Enable all N tools?" só obedece a um TTY de verdade (pipe com `printf 'Y'` é cancelado em
